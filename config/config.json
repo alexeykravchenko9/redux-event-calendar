@@ -1,0 +1,24 @@
+{
+  "api":{
+    "path": "localhost",
+    "name": "api",
+    "port": 3032
+  },
+  "mongoose": {
+    "uri": "mongodb://localhost:27017/eventcalendar",
+    "options": {
+      "server": {
+        "socketOptions":{
+          "keepAlive": 1
+        }
+      }
+    }
+  },
+  "session":{
+    "secret": "eventCalendarSecr",
+    "key": "sid",
+    "cookie": {
+      "maxAge": null
+    }
+  }
+}

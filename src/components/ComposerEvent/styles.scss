@@ -1,0 +1,59 @@
+
+// Composter form
+.recCompForm{
+  display: flex;
+  margin-top: 70px;
+  flex-direction: column;
+  h3{
+    font-size: 18px;
+  }
+
+  .recCompFormField{
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .recCompFormField.w50{
+    width: 50%;
+  }
+
+  .recCompFormSelect{
+    margin-right: 20px;
+    label{
+      width: 80px;
+      display: inline-block;
+    }
+    select{
+      width: 100px;
+    }
+  }
+
+  form{
+
+    width: 80%;
+    display: flex;
+    flex-flow: column nowrap;
+    background: #ebf6ff;
+    border: 1px #c1d1e0 solid;
+    padding: 3%;
+    input[type='text']{
+      width: 100%;
+    }
+
+    textarea{
+      width: calc(100% - 22px);
+      resize: none;
+      height: 60px;
+    }
+
+    input[type='submit']{
+      background: #28a745;
+      color: #fff;
+      border-color: #0a8c28;
+      font-weight: 400;
+      width: 130px;
+      float: right;
+      font-size: 14px;
+    }
+
+  }
+}

@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400');
+
+body{
+  font-family: 'Open Sans', sans-serif;
+}
+
+input,
+textarea,
+select{
+  font-family:"Open Sans", sans-serif;
+  border: 1px #cadcea solid;
+  background: #ffffff;
+  color: #808080;
+  font-weight: 300;
+  padding: 10px;
+  outline: none;
+}
+
+label{
+  font-family:"Open Sans", sans-serif;
+  color: #636060;
+  font-weight: 300;
+}
+
+
+.w50{
+  width: 50%;
+  margin-right:5%;
+}
+.w50+.w50{
+  margin-right: 0;
+}
