@@ -87,10 +87,4 @@ export const showDb = () => {
     }).then( data => exportObj);
 
 
-   // return exportObj;
-
 };
-
-// export const listEvents = (id, userId) => {
-//     return Event.find();
-// };

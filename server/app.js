@@ -22,8 +22,6 @@ app.use( cors({ origin: "*", credentials: true  }) );
 
 app.use( bodyParser.json() );
 
-// app.use( cors({ origin: ['http://localhost:8085'], methods:['GET','POST'], credentials: true  }) );
-
 app.use( session({
     secret: config.session.secret,
     cookie: { maxAge: 60000, httpOnly: true },
@@ -41,18 +39,6 @@ app.use( cookieParser() );
 app.use('/api', router);
 
 
-// app.post('/events', events.post);
-//
-// app.get('/events', events.get);
-//
-// app.delete('/events/:id', (req, res) => {
-//
-//         console.log(req.params.id);
-//         // Event.remove({ id }, (err) => err );
-//
-//         res.status(200).json({ message: "Removed " + req.params.id });
-//
-// });
 
 app.post('/api/login', login.post);
 
