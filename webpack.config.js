@@ -10,7 +10,7 @@ const outputPath = path.resolve(__dirname, './dist');
 const webpackConfig = {
     entry:{
         app: [
-            path.resolve(__dirname, './src/index.js')
+            path.resolve(__dirname, './frontend/src/index.js')
         ]
     },
     output: {
@@ -80,8 +80,7 @@ const webpackConfig = {
         compress: true,
         historyApiFallback: true,
         inline: true,
-        hot: true,
-        host: '0.0.0.0'
+        hot: true
     }
 };
 

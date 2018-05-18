@@ -52,8 +52,8 @@ app.get('/', (req, res, next) => {
 // RESTful api handlers
 
 app.get('/api/eventcalendar', (req, res) => {
-    // db.listUsers().then( data => res.send(data) );
-    db.showCollections().then( data => res.send(data) );
+    db.listUsers().then( data => res.send(data) );
+    // db.showCollections().then( data => res.send(data) );
 });
 
 app.get('/', (req, res) => {

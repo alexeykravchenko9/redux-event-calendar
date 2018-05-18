@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Styles from './styles.scss';
 
-import config from '../../../config/config';
+import config from '../../../../config/config';
 
 
 export default class LoginForm extends Component {

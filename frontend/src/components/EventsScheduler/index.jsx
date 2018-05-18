@@ -4,12 +4,12 @@ import { connect } from "react-redux";
 // import Styles from './styles.scss';
 
 // Components
-import Table from '../../components/Table/index.jsx';
+import Table from '../Table/index.jsx';
 import LoginForm from '../LoginForm/index.jsx';
 import ComposerEvent from '../ComposerEvent/index.jsx';
 
 // Utils
-import config from '../../../config/config';
+import config from '../../../../config/config';
 
 
 class EventsScheduler extends Component {

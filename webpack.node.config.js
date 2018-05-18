@@ -5,7 +5,7 @@ const path = require('path');
 module.exports = {
 
     target: "node",
-    entry: "./server/app.js",
+    entry: "./backend/app.js",
     output: {
         path: path.resolve(__dirname, './dist'),
         filename: "lib.node.js"
