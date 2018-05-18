@@ -1,18 +1,15 @@
-// import mongoose from "mongoose";
-
-const mongoose = require('mongoose');
-
-
+import mongoose from "mongoose";
+import config from './../config';
 import '../models/User';
 import '../models/Event';
+
+const { db } = config();
 
 const User = mongoose.model('User');
 const Event = mongoose.model('Event');
 
-export const dbConnect = () => {
-    mongoose.connect('mongodb://localhost:27017/eventcalendar');
-};
-
+export const dbConnect = () => mongoose.connect(`mongodb://${db.hostname}:27017/${db.database}`,
+                     { user: db.username, pass: db.password });
 
 export const createUser = (data) => {
 

@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import reducer from '../../reducers/reducers';
+import configureStore from "../../store/configureStore";
 
 import Styles from './styles.scss';
 
 // Components
-import EventsScheduler from '../../components/EventsScheduler/index.jsx';
-// Utils
-// import config from '../../../config/config';
+import EventsScheduler from '../EventsScheduler/index.jsx';
 
 
-const store = createStore(reducer);
+
+const store = configureStore();
 window.store = store;
 
 

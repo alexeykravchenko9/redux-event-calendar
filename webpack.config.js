@@ -4,6 +4,8 @@ const autoprefixer = require('autoprefixer');
 const precss = require('precss');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
+const config = require('dotenv/config');
+
 
 const outputPath = path.resolve(__dirname, './dist');
 
@@ -13,6 +15,7 @@ const webpackConfig = {
             path.resolve(__dirname, './frontend/src/index.js')
         ]
     },
+    devtool: 'eval',
     output: {
         path: outputPath,
         filename: "[name].js"
@@ -59,28 +62,32 @@ const webpackConfig = {
             {
                 test:/\.(gif|png|jpg|jpeg|svg)/,
                 exclude: /node-modules/,
-                include: path.resolve(__dirname, './src/assets'),
+                include: path.resolve(__dirname, './frontend/src/assets'),
                 use: 'url-loader?limit=10000&name=assets/[name]-[hash].[ext]'
             }
         ]
     },
     plugins: [
         new HtmlWebPackPlugin({
-            template: path.join(__dirname, './src/index.html'),
+            template: path.join(__dirname, './frontend/src/index.html'),
             filename: 'index.html',
             alwaysWriteToDisk: true,
             path: outputPath
         }),
         new HtmlWebpackHarddiskPlugin(),
         new webpack.NamedModulesPlugin(),
-        new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.DefinePlugin({
+            SERVER_PORT: JSON.stringify(process.env.SERVER_PORT)
+        })
     ],
     devServer: {
         contentBase: path.resolve(__dirname, './dist'),
         compress: true,
         historyApiFallback: true,
         inline: true,
-        hot: true
+        hot: true,
+        host: '0.0.0.0'
     }
 };
 

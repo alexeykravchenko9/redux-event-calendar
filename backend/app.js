@@ -10,20 +10,25 @@ import * as db from './utils/dbFunctions';
 import * as login from './routes/login';
 import { router } from './routes/events';
 
-import config from '../config/config.json';
+import config from './config';
+const { serverConf, session: sessionConf } = config();
 
-// Init Express App
 const app = express();
 
+
 // Connect DB
-db.dbConnect();
+app.use( (req, res, next) => {
+
+    db.dbConnect().then( db => next()).catch(e => console.error(e.message + ' Please check ENV config of DB CONNECTION', 'ERROR'));
+
+});
 
 app.use( cors({ origin: "*", credentials: true  }) );
 
 app.use( bodyParser.json() );
 
 app.use( session({
-    secret: config.session.secret,
+    secret: sessionConf.secret,
     cookie: { maxAge: 60000, httpOnly: true },
     store: new MongoStore({ mongooseConnection: mongoose.connection }),
     resave: false,
@@ -70,7 +75,7 @@ app.get('/api/db', (req, res) => {
 
 
 
-const server = app.listen(config.api.port, () => {
-    console.log(`Server API running on port ${config.api.port}`);
+const server = app.listen(serverConf.port, () => {
+    console.log(`Server API running on port ${serverConf.port}`);
 });
 

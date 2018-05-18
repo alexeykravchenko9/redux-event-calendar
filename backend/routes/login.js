@@ -7,7 +7,7 @@ export const get = (req, res) => {
 
 export const post = (req, res, next) => {
     const { username, password } = req.body;
-    // const password = req.body.password;
+
     res.cookie('Test', 'Hello', { domain: 'http://localhost:8085' });
     req.session.newUser = 'test cookie';
     req.session.save();
