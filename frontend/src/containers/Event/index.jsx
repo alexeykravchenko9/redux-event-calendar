@@ -22,7 +22,7 @@ export default class Event extends Component {
         const startTime = (start >= 600) ? start - 600 : start;
 
         return(
-            <section>
+            // <section>
                     <div
                         className={Styles.recEventsColumnItem}
                         style = {{ top:startTime + 2, height: duration - 1, width:`${width}%` }}>
@@ -33,7 +33,7 @@ export default class Event extends Component {
                     </div>
 
 
-            </section>
+            // </section>
         )
     }
 }
