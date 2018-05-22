@@ -1,4 +1,3 @@
-// import mongoose from "mongoose";
 
 import { User } from '../models/User';
 
@@ -20,7 +19,6 @@ export const signIn = (req, res, next) => {
 
                     if (result){
                         const { id, username } = user;
-                        console.log(user, 'user');
 
                         req.session.userID = { id, username };
                         req.session.save();

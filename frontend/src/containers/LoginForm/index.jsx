@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import Styles from './styles.scss';
 
-import makeLogin from "../../utils/makeLogin";
-
-
 export default class LoginForm extends Component {
     constructor(props){
         super(props);
@@ -47,30 +44,43 @@ export default class LoginForm extends Component {
             this.setState({
                 validation: ""
             });
-            makeLogin(username, password).then(data => {
 
-                    (data.meta.code !== 403) ? this.props.setUser(data.user) : '';
-                    // const statusToState = (data) => {
-                    //
-                    //     this.setState({
-                    //         message: data.meta.message,
-                    //         style: (data.meta.code === 403) ? Styles.recFail : Styles.recSuccess
-                    //     }, () => {
-                    //         setTimeout( () => {
-                    //             (data.meta.code !== 403 ) ? this.setState({ message: "", username: "", password: "" }) : '';
-                    //         }, 2000);
-                    //
-                    //     });
-                    //
-                    // };
-                    //
-                    // statusToState(data);
+            this.props.setLogin(username, password);
 
 
-
-                });
+            // .then(data => {
+            //         console.log(data, 'data');
+            //
+            //
+            //         const statusToState = (data) => {
+            //
+            //             this.setState({
+            //                 message: data.meta.message,
+            //                 style: (data.meta.code === 403) ? Styles.recFail : Styles.recSuccess
+            //             }, () => {
+            //                 setTimeout( () => {
+            //                     (data.meta.code !== 403 ) ? this.setState({ message: "", username: "", password: "" }) : '';
+            //                 }, 2000);
+            //
+            //             });
+            //
+            //         };
+            //
+            //         statusToState(data);
+            //
+            //         (data.meta.code === 403) ? statusToState(data) : '';
+            //
+            //
+            //
+            //     });
 
         } // Check validation
+    }
+
+    componentWillReceiveProps(nextProps){
+        (nextProps.error) ? this.setState({ message: nextProps.error, style: Styles.recFail })
+            : this.setState({ message: "", username: "", password: "" });
+
     }
 
 

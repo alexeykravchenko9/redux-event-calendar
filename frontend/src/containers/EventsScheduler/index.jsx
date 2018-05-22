@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
 
 // Components
 import Table from '../Table/index.jsx';
@@ -8,11 +9,12 @@ import ComposerEvent from '../ComposerEvent/index.jsx';
 
 
 // Actions
-import { setUser } from "../../actions/users";
+import { checkAuthUser, setLogin } from "../../actions/users";
 
 //utils
-import checkUser from "../../utils/checkUser";
+// import checkUser from "../../utils/checkUser";
 import getCookies from "../../utils/getCookies";
+// import makeLogin from "../../utils/makeLogin";
 
 class EventsScheduler extends Component {
 
@@ -28,16 +30,7 @@ class EventsScheduler extends Component {
     }
 
     componentWillMount(){
-        checkUser().then( user => {
-
-            if(Object.keys(user).length > 0) {
-                this.props.setUser(user.sessionUserID);
-            } else {
-                return {};
-            }
-
-        }).catch( e => console.error(e));
-
+        this.props.checkAuthUser();
     }
     componentWillReceiveProps(){
         this.setState({
@@ -47,10 +40,15 @@ class EventsScheduler extends Component {
 
     render() {
 
-        const { users, setUser } = this.props;
+        const { users, setUser, setLogin } = this.props;
         const { loggedCookie } = this.state;
 
-        const formRender = (loggedCookie) ? <ComposerEvent /> : <LoginForm setUser = { setUser } />;
+        const formRender = (loggedCookie) ? <ComposerEvent />
+            : <LoginForm
+                setLogin = { setLogin }
+                setUser = { setUser }
+                error = { users.error }
+            />;
         return(
 
                 <section>
@@ -71,7 +69,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    setUser: (user) => dispatch(setUser(user))
+    setLogin: bindActionCreators(setLogin, dispatch),
+    checkAuthUser: bindActionCreators(checkAuthUser, dispatch)
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventsScheduler);

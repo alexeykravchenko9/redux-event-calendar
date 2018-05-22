@@ -8,7 +8,8 @@ import Event from '../Event/index.jsx';
 
 
 // Actions
-import { makeLogout } from "../../actions/users";
+import { setLogout } from "../../actions/users";
+import { fetchAllEvents } from "../../actions/events";
 
 
 class Table extends Component {
@@ -19,12 +20,16 @@ class Table extends Component {
         this.handleLogout = this.handleLogout.bind(this);
     }
 
+    componentWillMount(){
+        this.props.fetchAllEvents();
+    }
+
     handleAddNew(e){
         this.props.addNewItem({ name: 'Event name' });
     }
 
     handleLogout(e){
-        this.props.makeLogout()
+        this.props.setLogout()
     }
 
 
@@ -39,9 +44,6 @@ class Table extends Component {
                     <h1 className = { Styles.recGeneral }>Daily Event Calendar</h1>
                     <span className={ Styles.recLogoutBtn } onClick={ this.handleLogout  }>Logout</span>
                 </div>
-
-
-
 
                 <div className = {Styles.recColumnParent}>
 
@@ -206,7 +208,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        makeLogout: bindActionCreators(makeLogout, dispatch)
+        setLogout: bindActionCreators(setLogout, dispatch),
+        fetchAllEvents: bindActionCreators(fetchAllEvents, dispatch)
     }
 };
 

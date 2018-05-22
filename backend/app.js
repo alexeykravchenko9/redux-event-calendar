@@ -14,6 +14,7 @@ import { calendarRouter } from "./routes/calendar";
 
 //Middlewares
 import checkLoggedUser from "./middlewares/checkLoggedUser";
+import secureRoute from "./middlewares/secureRoute";
 
 import config from './config';
 const { serverConf, session: sessionConf, clientConf } = config();
@@ -40,44 +41,29 @@ app.use( session({
     cookie: { maxAge: null, httpOnly: true },
     store: new MongoStore({ mongooseConnection: mongoose.connection }),
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     rolling: true
 
 }));
 
-
-app.get('/', checkLoggedUser);
+app.get('/', checkLoggedUser );
 
 // Events API
-app.use('/api', router);
-
-app.use('/api', calendarRouter);
 
 app.post('/api/login', login.signIn);
 
 app.post('/api/logout', login.signOut);
 
 
-// RESTful api handlers
+app.use('/api', router);
 
-app.get('/api/eventcalendar', (req, res) => {
-    db.listUsers().then( data => res.send(data) );
-    // db.showCollections().then( data => res.send(data) );
-});
+app.use('/api', secureRoute, calendarRouter);
 
-// app.get('/', (req, res) => {
-//     res.send('Server is running');
-// });
-
-
-
-app.get('/api/db', (req, res) => {
-
+app.get('/api/db', secureRoute, (req, res) => {
+    console.log(req.session, 'req.session.userID');
     db.showDb().then( data => res.json(data));
 
 });
-
-
 
 const server = app.listen(serverConf.port, () => {
     console.log(`Server API running on port ${serverConf.port}`);
