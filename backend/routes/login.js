@@ -65,6 +65,7 @@ export const signIn = (req, res, next) => {
                     req.session.save();
                     res.cookie('authstat', '1');
                     res.status(201).json({
+                        user,
                         meta: {
                             type: "success",
                             code: 201,

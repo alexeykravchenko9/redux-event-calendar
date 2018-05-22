@@ -32,7 +32,9 @@ export const setLogin = (username, password) => dispatch => {
     return makeLogin(username, password).then(res => {
 
         if(res.meta.code !== 403) {
-            const { id, username } = res.user;
+            console.log(res.user, 'res.user dispatch');
+
+            const { _id: id, username } = res.user;
 
             dispatch({
                 type: MAKE_LOGIN,

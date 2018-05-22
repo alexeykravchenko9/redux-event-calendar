@@ -37,7 +37,7 @@ router.post('/events', (req, res, next) => {
 })
 .get('/events', (req, res) => {
 
-    Event.find().then( data => res.status(200).json(data) );
+    Event.find({ owner: req.session.userID.id }).then( data => res.status(200).json(data) );
 
 })
 .delete('/events/:event_id', (req, res) => {
