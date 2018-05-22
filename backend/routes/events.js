@@ -8,12 +8,13 @@ router.post('/events', (req, res, next) => {
 
     // Owner we will get from user Session
     const { title, start, duration } = req.body;
-    let owner;
-    if(req.session.userID) {
-        owner = req.session.userID;
-    } else {
-        owner = req.body.owner;
-    };
+    let owner = req.session.userID.id;
+
+    // if(req.session.userID) {
+    //     owner = req.session.userID;
+    // } else {
+    //     owner = req.body.owner;
+    // };
 
     Event.find({ title }, (err, events) => {
         if(events.length <= 0) {

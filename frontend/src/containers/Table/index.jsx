@@ -3,45 +3,119 @@ import Styles from "./styles.scss";
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux'
 
+import { API_EXPORT_CALENDAR } from "../../constants/api";
+
 // Components
 import Event from '../Event/index.jsx';
 
-
 // Actions
 import { setLogout } from "../../actions/users";
-import { fetchAllEvents } from "../../actions/events";
+import { fetchAllEvents, removeEventItem } from "../../actions/events";
+
 
 
 class Table extends Component {
     constructor(props){
         super(props);
 
-        this.handleAddNew = this.handleAddNew.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
+        this.handleExport = this.handleExport.bind(this);
     }
 
     componentWillMount(){
         this.props.fetchAllEvents();
     }
 
-    handleAddNew(e){
-        this.props.addNewItem({ name: 'Event name' });
-    }
-
     handleLogout(e){
         this.props.setLogout()
+    }
+
+    handleExport(e){
+        window.open(API_EXPORT_CALENDAR,'_blank');
+    }
+
+    componentWillReceiveProps(){
+
     }
 
 
 
     render(){
-        console.log(this.props, 'Events props');
+
+        const { items } = this.props.events;
+        let eventLeft = [];
+        let eventRight = [];
+
+        let renderLeft = [];
+
+
+        for(let i = 0; i < items.length; i++){
+            if( items[i].start <= 600 ) {
+                eventLeft.push(items[i]);
+            } else {
+                eventRight.push(items[i]);
+            }
+        }
+        // let renderEventLeft = [];
+
+        // for(let i = 0; i <= eventLeft.length - 1; i++){
+        //     const currentItem = eventLeft[i].start + eventLeft[i].duration;
+        //
+        //     const nextItem = (eventLeft[i + 1]) ? eventLeft[i + 1].start : '';
+        //
+        //     // const nextItem = eventLeft[i + 1].start;
+        //
+        //     if(nextItem <= currentItem){
+        //         renderLeft.push({ width: 50, ...eventLeft[i]});
+        //     } else {
+        //         renderLeft.push({ width: 100, ...eventLeft[i]});
+        //     }
+        //
+        // }
+        //
+        // console.log(renderLeft, 'renderEventLeft');
+
+        // const renderEventLeft = eventLeft.map( (item, index, arr) => {
+        //     let width;
+        //     const nextItem = arr[index+1].start;
+        //     const currentItem = item.start;
+        //     console.log(nextItem, currentItem, 'prev - next');
+        //
+        //
+        //     if(arr[index+1]){
+        //         if(item.start === arr[index+1].start){
+        //             width = 50;
+        //             return <Event key={ 'a' + index } data={ item } width={width} />;
+        //         } else {
+        //
+        //             width = 100;
+        //
+        //         }
+        //     }
+        //
+        //     return <Event key={ 'a' + index } data={ item } width={width} />;
+        //
+        //
+        //
+        //
+        // });
+
+
+        const renderEventLeft = eventLeft.map( (item, index) => <Event key={ item._id }
+                                                                       removeEventItem = { this.props.removeEventItem }
+                                                                       data={ item } />);
+
+        const renderEventRight = eventRight.map( (item, index) => <Event key={ item._id  }
+                                                                         removeEventItem = { this.props.removeEventItem }
+                                                                         data={ item } />);
+
 
         return(
             <section>
 
                 <div className={ Styles.recEventsTopTitle }>
                     <h1 className = { Styles.recGeneral }>Daily Event Calendar</h1>
+                    <span className={ Styles.recLogoutBtn } onClick={ this.handleExport  }>Export JSON</span>
                     <span className={ Styles.recLogoutBtn } onClick={ this.handleLogout  }>Logout</span>
                 </div>
 
@@ -118,9 +192,7 @@ class Table extends Component {
                         </div>
 
                         <div className={Styles.recEventsColumn}>
-
-                            <Event key="" />
-
+                            { renderEventLeft }
                         </div>
 
 
@@ -185,9 +257,7 @@ class Table extends Component {
                         </div>
 
                         <div className={Styles.recEventsColumn}>
-
-                            <Event key={`right_col_items`}/>
-
+                            { renderEventRight }
                         </div>
 
                     </div>
@@ -209,7 +279,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         setLogout: bindActionCreators(setLogout, dispatch),
-        fetchAllEvents: bindActionCreators(fetchAllEvents, dispatch)
+        fetchAllEvents: bindActionCreators(fetchAllEvents, dispatch),
+        removeEventItem: bindActionCreators(removeEventItem, dispatch)
     }
 };
 

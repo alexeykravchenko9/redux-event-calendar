@@ -5,6 +5,7 @@
 .recEventsColumnItem{
   height: 70px;
   padding: 5px;
+  font-size: 14px;
   width: 100%;
   position: absolute;
   top:0;
@@ -12,4 +13,27 @@
   background: #E2ECF5;
   box-sizing: border-box;
   border-left: 2px #6E9ECF solid;
+
+  &:hover a{
+    opacity:1;
+    visibility: visible;
+  }
+
+}
+
+.recEventsColumnItemRemove{
+  font-size: 14px;
+  right: 7px;
+  position: absolute;
+  bottom: 7px;
+  font-weight: bold;
+  color: #6d9ecf;
+  cursor: pointer;
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: all 0.1s ease-in;
+  -moz-transition: all 0.1s ease-in;
+  -ms-transition: all 0.1s ease-in;
+  -o-transition: all 0.1s ease-in;
+  transition: all 0.1s ease-in;
 }

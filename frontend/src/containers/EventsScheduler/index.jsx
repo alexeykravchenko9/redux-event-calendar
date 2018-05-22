@@ -12,9 +12,7 @@ import ComposerEvent from '../ComposerEvent/index.jsx';
 import { checkAuthUser, setLogin } from "../../actions/users";
 
 //utils
-// import checkUser from "../../utils/checkUser";
 import getCookies from "../../utils/getCookies";
-// import makeLogin from "../../utils/makeLogin";
 
 class EventsScheduler extends Component {
 

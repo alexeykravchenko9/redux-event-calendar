@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import Styles from './styles.scss';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
+
+import { addEvents } from "../../actions/events";
 
 
 class ComposterEvent extends Component {
@@ -25,24 +28,33 @@ class ComposterEvent extends Component {
     _handleFormSubmitEvent(e){
 
         e.preventDefault();
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'http://localhost:3032/api/events', true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
 
-        const { title, hours, minutes, owner } = this.state;
+        const { title, hours, minutes } = this.state;
+        console.log(this.props.users.loggedUser);
 
-        let obj = { title: title, start: hours, duration: minutes, owner: 'Alexey Redux' };
+        this.props.addEvents(title, hours, minutes * 2).then( res => {
+            console.log(res, 'res added');
+            if(res.status === 201) {
+                this.setState({
+                    title: '',
+                    hours: 0,
+                    minutes: 0,
+                    status: 'Event added'
+                }, () => {
+                    setTimeout( () => { this.setState({
+                        status: ''
+                    })}, 3000);
+                });
 
-        xhr.send(JSON.stringify(obj));
+            } else if(res.status === 403) {
+                this.setState({
+                    status: 'Event already exist'
+                });
+            }
 
-        xhr.onload = () => {
-            this.setState({
-                title: '',
-                hours: 0,
-                minutes: 0,
-                status: "Event succesfully send"
-            });
-        };
+
+
+        });
 
     }
 
@@ -67,8 +79,6 @@ class ComposterEvent extends Component {
             this.setState({ title: value });
         }
 
-        console.log(this.state);
-
     }
 
 
@@ -84,7 +94,7 @@ class ComposterEvent extends Component {
 
         // Generate option tag
         while (h < 10) {
-            tags[h] = <option value={ (h === 0 ) ? 0 : m += 60 }> {h + 8} {(h < 4 ) ? 'am' : 'pm'}</option>;
+            tags[h] = <option value={ (h === 0 ) ? 0 : m += 60 * 2 }> {h + 8} {(h < 4 ) ? 'am' : 'pm'}</option>;
             h++;
         }
 
@@ -115,7 +125,7 @@ class ComposterEvent extends Component {
                         <input
                             type="number"
                             min="00"
-                            max="60"
+                            max="240"
                             step="00"
                             id="minutes"
                             onChange={ this.handleEventField }
@@ -139,13 +149,14 @@ class ComposterEvent extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        events: state
+        events: state.events,
+        users: state.users
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        addNewItem: (args) => dispatch({ type: 'ADD_NEW_ITEM', payLoad: args})
+        addEvents: bindActionCreators(addEvents, dispatch)
     }
 }
 

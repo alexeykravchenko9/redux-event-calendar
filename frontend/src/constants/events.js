@@ -1,1 +1,3 @@
 export const FETCH_ALL_EVENTS = 'FETCH_ALL_EVENTS';
+export const ADD_EVENT = 'ADD_EVENT';
+export const REMOVE_EVENT = 'REMOVE_EVENT';
