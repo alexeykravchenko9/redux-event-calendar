@@ -9,9 +9,14 @@ import cors from 'cors';
 import * as db from './utils/dbFunctions';
 import * as login from './routes/login';
 import { router } from './routes/events';
+import { calendarRouter } from "./routes/calendar";
+
+
+//Middlewares
+import checkLoggedUser from "./middlewares/checkLoggedUser";
 
 import config from './config';
-const { serverConf, session: sessionConf } = config();
+const { serverConf, session: sessionConf, clientConf } = config();
 
 const app = express();
 
@@ -23,13 +28,16 @@ app.use( (req, res, next) => {
 
 });
 
-app.use( cors({ origin: "*", credentials: true  }) );
+app.use( cors({ origin: clientConf.url, credentials: true  }) );
 
 app.use( bodyParser.json() );
 
+app.use( cookieParser() );
+
 app.use( session({
     secret: sessionConf.secret,
-    cookie: { maxAge: 60000, httpOnly: true },
+    key: 'auth_sid',
+    cookie: { maxAge: null, httpOnly: true },
     store: new MongoStore({ mongooseConnection: mongoose.connection }),
     resave: false,
     saveUninitialized: true,
@@ -37,21 +45,17 @@ app.use( session({
 
 }));
 
-app.use( cookieParser() );
 
+app.get('/', checkLoggedUser);
 
 // Events API
 app.use('/api', router);
 
+app.use('/api', calendarRouter);
 
+app.post('/api/login', login.signIn);
 
-app.post('/api/login', login.post);
-
-
-app.get('/', (req, res, next) => {
-   req.session.Second = 'Test 2';
-   res.send("Visits: " + req.session.Second);
-});
+app.post('/api/logout', login.signOut);
 
 
 // RESTful api handlers
@@ -61,9 +65,9 @@ app.get('/api/eventcalendar', (req, res) => {
     // db.showCollections().then( data => res.send(data) );
 });
 
-app.get('/', (req, res) => {
-    res.send('Server is running');
-});
+// app.get('/', (req, res) => {
+//     res.send('Server is running');
+// });
 
 
 

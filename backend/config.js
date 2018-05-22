@@ -5,6 +5,9 @@ export default () => ({
     serverConf: {
         port: process.env.SERVER_PORT
     },
+    clientConf: {
+        url: process.env.CLIENT_URL
+    },
     db:{
         hostname: process.env.DB_HOST,
         database: process.env.DB_NAME,

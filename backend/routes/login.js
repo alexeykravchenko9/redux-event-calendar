@@ -1,36 +1,43 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
+
 import { User } from '../models/User';
 
-export const get = (req, res) => {
-
+export const signOut = (req, res, next) => {
+    req.session.destroy();
+    res.cookie('authstat', '0').send(200);
+    console.log(req.session, 'req.session');
 };
 
-export const post = (req, res, next) => {
+export const signIn = (req, res, next) => {
     const { username, password } = req.body;
-
-    res.cookie('Test', 'Hello', { domain: 'http://localhost:8085' });
-    req.session.newUser = 'test cookie';
-    req.session.save();
-
 
     User.findOne({ username: username }).exec()
         .then( (user) => {
 
             if(user){
 
-                return user.checkPass(password).then( (result) => {
+                return user.checkPass(password).then( result => {
 
                     if (result){
+                        const { id, username } = user;
+                        console.log(user, 'user');
 
-                        // ... 200 OK
+                        req.session.userID = { id, username };
+                        req.session.save();
+
+                        res.cookie('authstat', '1');
                         res.status(200).json({
+                            user: user,
                             meta: {
                                 type: "success",
                                 code: 200,
                                 message: "Password is correct"
-                            }
+                            },
+
                         });
-                        console.log('Pass is correct!');
+
+
+
                         return user;
 
                     } else {
@@ -39,7 +46,7 @@ export const post = (req, res, next) => {
                             meta: {
                                 type: "failure",
                                 code: 403,
-                                message: "Password is not correct"
+                                message: "Password or Login is not correct"
                             }
                         });
                         return new Error();
@@ -51,16 +58,14 @@ export const post = (req, res, next) => {
             } else {
 
                 const user = new User({ username: username, password: password });
-                // req.session.ourUser = user._id;
+
 
                 user.save((err) => {
                     if (err) return next(err);
 
-                    //
-                    // console.log('Check sessions', res.session.newUser);
-                    console.log('Headers', res.headersSent);
-
-
+                    req.session.userID = user.id;
+                    req.session.save();
+                    res.cookie('authstat', '1');
                     res.status(201).json({
                         meta: {
                             type: "success",
@@ -71,20 +76,12 @@ export const post = (req, res, next) => {
 
                     next();
 
-                    // console.log('New user was added', userNew._id);
-
-                    // ... 200 OK
                 });
 
-
-
-                // return req.session.newUser = user._id;
 
             }
 
         });
 
-
-    // console.log('New user', user);
 
 };

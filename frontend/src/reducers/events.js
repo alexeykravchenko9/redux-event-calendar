@@ -1,4 +1,4 @@
-import { FETCH_ALL_EVENTS } from "../actions/events";
+import { FETCH_ALL_EVENTS } from "../constants/events";
 
 const initialState = {
     items: []

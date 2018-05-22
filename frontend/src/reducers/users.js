@@ -1,13 +1,15 @@
-import { CURRENT_USER } from '../actions/users';
+import { USER_LOGGED, MAKE_LOGOUT } from '../constants/users';
 
 const initialState = {
-    loggedUserID: ''
+    loggedUser: {}
 };
 
 export default (state = initialState, action) => {
     switch (action.type){
-        case CURRENT_USER:
-            return {...state, loggedUserID: action.payLoad };
+        case USER_LOGGED:
+            return {...state, loggedUser: action.payLoad };
+        case MAKE_LOGOUT:
+            return {...state, loggedUser: {}};
         default:
             return state;
     }

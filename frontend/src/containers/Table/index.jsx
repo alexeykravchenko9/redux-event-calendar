@@ -1,20 +1,30 @@
 import React, { Component } from "react";
 import Styles from "./styles.scss";
 import { connect } from "react-redux";
-
+import { bindActionCreators } from 'redux'
 
 // Components
 import Event from '../Event/index.jsx';
+
+
+// Actions
+import { makeLogout } from "../../actions/users";
+
 
 class Table extends Component {
     constructor(props){
         super(props);
 
         this.handleAddNew = this.handleAddNew.bind(this);
+        this.handleLogout = this.handleLogout.bind(this);
     }
 
     handleAddNew(e){
         this.props.addNewItem({ name: 'Event name' });
+    }
+
+    handleLogout(e){
+        this.props.makeLogout()
     }
 
 
@@ -25,10 +35,16 @@ class Table extends Component {
         return(
             <section>
 
-                <h1 className = {Styles.recGeneral}>Daily Event Calendar</h1>
+                <div className={ Styles.recEventsTopTitle }>
+                    <h1 className = { Styles.recGeneral }>Daily Event Calendar</h1>
+                    <span className={ Styles.recLogoutBtn } onClick={ this.handleLogout  }>Logout</span>
+                </div>
+
+
+
 
                 <div className = {Styles.recColumnParent}>
-                    {/*<button onClick={ this.handleAddNew }>Add new item</button>*/}
+
                     {/* LEFT COLUMN */}
                     <div className={Styles.recColumnOne}>
 
@@ -183,14 +199,15 @@ class Table extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        events: state
+        events: state.events,
+        users: state.users
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        addNewItem: (args) => dispatch({ type: 'ADD_NEW_ITEM', payLoad: args})
+        makeLogout: bindActionCreators(makeLogout, dispatch)
     }
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Table);

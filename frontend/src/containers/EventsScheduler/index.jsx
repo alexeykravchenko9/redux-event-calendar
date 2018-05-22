@@ -7,28 +7,57 @@ import LoginForm from '../LoginForm/index.jsx';
 import ComposerEvent from '../ComposerEvent/index.jsx';
 
 
+// Actions
+import { setUser } from "../../actions/users";
+
+//utils
+import checkUser from "../../utils/checkUser";
+import getCookies from "../../utils/getCookies";
 
 class EventsScheduler extends Component {
 
-    state = {
-      events: [],
-    };
 
+    constructor(props){
+        super(props);
+
+        this.state = {
+            events: [],
+            loggedCookie: (Number(getCookies('authstat')) === 1)
+        };
+
+    }
+
+    componentWillMount(){
+        checkUser().then( user => {
+
+            if(Object.keys(user).length > 0) {
+                this.props.setUser(user.sessionUserID);
+            } else {
+                return {};
+            }
+
+        }).catch( e => console.error(e));
+
+    }
+    componentWillReceiveProps(){
+        this.setState({
+            loggedCookie: (Number(getCookies('authstat')) === 1)
+        })
+    }
 
     render() {
-        const sessionUser = false;
 
+        const { users, setUser } = this.props;
+        const { loggedCookie } = this.state;
+
+        const formRender = (loggedCookie) ? <ComposerEvent /> : <LoginForm setUser = { setUser } />;
         return(
 
                 <section>
 
-                    <Table />
+                    { loggedCookie && <Table /> }
 
-                    { sessionUser ? (
-                        <ComposerEvent />
-                    ) : (
-                        <LoginForm />
-                    )}
+                    { formRender }
 
 
                 </section>
@@ -37,14 +66,13 @@ class EventsScheduler extends Component {
 }
 
 
-const mapStateToProps = state => {
+const mapStateToProps = state => ({
+    users: state.users
+});
 
-};
-
-const mapDispatchToProps = dispatch => {
-
-
-};
+const mapDispatchToProps = dispatch => ({
+    setUser: (user) => dispatch(setUser(user))
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventsScheduler);
 
