@@ -63,7 +63,7 @@ class ComposterEvent extends Component {
         const { target: {id, value} } = e;
 
         if (id === "minutes"){
-            if( value <= 60 ){
+            if( value <= 240 ){
                 this.setState({ [id]: value });
                 e.currentTarget.style.borderColor = '#cadcea';
             } else {

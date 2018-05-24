@@ -46,32 +46,85 @@ class Table extends Component {
         let eventLeft = [];
         let eventRight = [];
 
-        let renderLeft = [];
-
 
         for(let i = 0; i < items.length; i++){
             if( items[i].start <= 600 ) {
-                eventLeft.push(items[i]);
+                eventLeft.push({ width: 1, left: 0, ...items[i]});
             } else {
                 eventRight.push(items[i]);
             }
         }
-        // let renderEventLeft = [];
 
-        // for(let i = 0; i <= eventLeft.length - 1; i++){
-        //     const currentItem = eventLeft[i].start + eventLeft[i].duration;
-        //
-        //     const nextItem = (eventLeft[i + 1]) ? eventLeft[i + 1].start : '';
-        //
-        //     // const nextItem = eventLeft[i + 1].start;
-        //
-        //     if(nextItem <= currentItem){
-        //         renderLeft.push({ width: 50, ...eventLeft[i]});
-        //     } else {
-        //         renderLeft.push({ width: 100, ...eventLeft[i]});
-        //     }
-        //
-        // }
+        console.log(eventLeft, 'eventLeft')
+
+
+
+
+        let renderReadyLeft = [];
+        let timeslots = [];
+
+        for(let i=0; i < 600; i++){
+            timeslots[i] = [];
+        }
+
+        for(let j = 0; j < eventLeft.length; j++){
+
+            for(let i=eventLeft[j].start; i < eventLeft[j].start + eventLeft[j].duration; i++ ){
+                timeslots[i].push(eventLeft[j]);
+            }
+
+        }
+        console.log(timeslots, 'timeslots');
+        for(let t = 0; t < 600; t++){
+            let countTimes = timeslots[t].length;
+
+            if (countTimes > 0) {
+
+                for(let n=0; n < countTimes; n++){
+
+
+                    if(countTimes > 1){
+                        // timeslots[t][n].width = countTimes;
+                        if(n === countTimes - 1){
+                            timeslots[t][n].left = 50;
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+
+        console.log(eventLeft, 'eventLeft');
+
+
+
+
+
+            // for(let i = 0; i < eventLeft.length; i++){
+            //
+            //     const itemSumm = eventLeft[i].start + eventLeft[i].duration;
+            //
+            //     const nextItemStart = (eventLeft[i + 1]) ? eventLeft[i + 1].start : 0;
+            //     const previtemStart = (eventLeft[i - 1]) ? eventLeft[i - 1].start : 0;
+            //
+            //     const prevItemSumm = (eventLeft[i - 1]) ? eventLeft[i - 1].start + eventLeft[i - 1].duration : '';
+            //     const nextItem = eventLeft[i + 1].start;
+            //
+            //     if(itemSumm >= nextItemStart || itemSumm <= previtemStart ) {
+            //
+            //         renderReadyLeft.push({ width: 50, ...eventLeft[i]});
+            //
+            //     } else {
+            //
+            //         renderReadyLeft.push({ width: 100, ...eventLeft[i]});
+            //     }
+            //
+            // }
+
+        console.log(renderReadyLeft, 'renderReadyLeft');
+
         //
         // console.log(renderLeft, 'renderEventLeft');
 
@@ -101,9 +154,28 @@ class Table extends Component {
         // });
 
 
-        const renderEventLeft = eventLeft.map( (item, index) => <Event key={ item._id }
-                                                                       removeEventItem = { this.props.removeEventItem }
-                                                                       data={ item } />);
+        const renderEventLeft = eventLeft.map( (item, index, arr) => {
+            // let nextWidthItem;
+            // let leftVal = 0;
+            //
+            // if(arr[index + 1]){
+            //     nextWidthItem = arr[index + 1].width;
+            // }
+            //
+            // if(item.width === nextWidthItem){
+            //     leftVal = 50;
+            // }
+
+
+            return <Event key={ item._id }
+                   removeEventItem = { this.props.removeEventItem }
+                   data={ item } />;
+
+        });
+
+        // const renderEventLeft = eventLeft.map( (item, index) => <Event key={ item._id }
+        //                                                                removeEventItem = { this.props.removeEventItem }
+        //                                                                data={ item } />);
 
         const renderEventRight = eventRight.map( (item, index) => <Event key={ item._id  }
                                                                          removeEventItem = { this.props.removeEventItem }

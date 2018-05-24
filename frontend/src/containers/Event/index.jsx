@@ -17,7 +17,7 @@ export default class Event extends Component {
     }
 
     render(){
-        const { title, start, duration, width } = this.props.data;
+        const { title, start, duration, width, left } = this.props.data;
 
         const startTime = (start >= 600) ? start - 600 : start;
 
@@ -25,7 +25,7 @@ export default class Event extends Component {
             // <section>
                     <div
                         className={Styles.recEventsColumnItem}
-                        style = {{ top:startTime + 2, height: duration - 1, width:`${width}%` }}>
+                        style = {{ left: left + '%', top:startTime + 2, height: duration - 1, width: 100 / width + '%' }}>
                         {title}
 
                         <a className={ Styles.recEventsColumnItemRemove } onClick={ this.handleRemoveEvent } title={"Remove Event"}>x</a>
