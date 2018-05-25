@@ -83,14 +83,12 @@ class ComposterEvent extends Component {
 
 
     render(){
-        const { title, hours, minutes, owner } = this.state;
+        const { title, minutes } = this.state;
 
         let h = 0,
-            m = 0,
-            mSelect2 = 0;
+            m = 0;
 
-        let tags = [],
-            tagsMinutes = [];
+        let tags = [];
 
         // Generate option tag
         while (h < 10) {
@@ -111,7 +109,7 @@ class ComposterEvent extends Component {
 
 
                     <div className={ [Styles.recCompFormField, Styles.recCompFormSelect].join(' ') }>
-                        <label htmlFor="startHour">Hours</label>
+                        <label htmlFor="startHour">Start</label>
 
                         <select id="eventHours" onChange={this.handleEventField} >
                             { tags }
@@ -121,7 +119,7 @@ class ComposterEvent extends Component {
 
                     <div className={ [Styles.recCompFormField, Styles.recCompFormSelect].join(' ') }>
 
-                        <label htmlFor="startHour">Minutes</label>
+                        <label htmlFor="startHour">Duration</label>
                         <input
                             type="number"
                             min="00"

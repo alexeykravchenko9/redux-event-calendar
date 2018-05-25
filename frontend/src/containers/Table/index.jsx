@@ -12,6 +12,8 @@ import Event from '../Event/index.jsx';
 import { setLogout } from "../../actions/users";
 import { fetchAllEvents, removeEventItem } from "../../actions/events";
 
+import renderEventsRight from "../../utils/renderEventsRight";
+
 
 
 class Table extends Component {
@@ -24,6 +26,7 @@ class Table extends Component {
 
     componentWillMount(){
         this.props.fetchAllEvents();
+
     }
 
     handleLogout(e){
@@ -34,152 +37,30 @@ class Table extends Component {
         window.open(API_EXPORT_CALENDAR,'_blank');
     }
 
-    componentWillReceiveProps(){
-
-    }
-
-
-
     render(){
 
         const { items } = this.props.events;
+        const allEventsArr = renderEventsRight(items);
+
         let eventLeft = [];
         let eventRight = [];
 
-
-        for(let i = 0; i < items.length; i++){
-            if( items[i].start <= 600 ) {
-                eventLeft.push({ width: 1, left: 0, ...items[i]});
+        for(let i = 0; i < allEventsArr.length; i++){
+            if( allEventsArr[i].start < 600 ) {
+                eventLeft.push( allEventsArr[i] );
             } else {
-                eventRight.push(items[i]);
+                eventRight.push( allEventsArr[i] );
             }
         }
 
-        console.log(eventLeft, 'eventLeft')
 
+        const leftEvents = eventLeft.map( (item, index) => <Event key={ item._id }
+                                              removeEventItem = { this.props.removeEventItem }
+                                              data={ item } />);
 
-
-
-        let renderReadyLeft = [];
-        let timeslots = [];
-
-        for(let i=0; i < 600; i++){
-            timeslots[i] = [];
-        }
-
-        for(let j = 0; j < eventLeft.length; j++){
-
-            for(let i=eventLeft[j].start; i < eventLeft[j].start + eventLeft[j].duration; i++ ){
-                timeslots[i].push(eventLeft[j]);
-            }
-
-        }
-        console.log(timeslots, 'timeslots');
-        for(let t = 0; t < 600; t++){
-            let countTimes = timeslots[t].length;
-
-            if (countTimes > 0) {
-
-                for(let n=0; n < countTimes; n++){
-
-
-                    if(countTimes > 1){
-                        // timeslots[t][n].width = countTimes;
-                        if(n === countTimes - 1){
-                            timeslots[t][n].left = 50;
-                        }
-                    }
-
-                }
-
-            }
-
-        }
-
-        console.log(eventLeft, 'eventLeft');
-
-
-
-
-
-            // for(let i = 0; i < eventLeft.length; i++){
-            //
-            //     const itemSumm = eventLeft[i].start + eventLeft[i].duration;
-            //
-            //     const nextItemStart = (eventLeft[i + 1]) ? eventLeft[i + 1].start : 0;
-            //     const previtemStart = (eventLeft[i - 1]) ? eventLeft[i - 1].start : 0;
-            //
-            //     const prevItemSumm = (eventLeft[i - 1]) ? eventLeft[i - 1].start + eventLeft[i - 1].duration : '';
-            //     const nextItem = eventLeft[i + 1].start;
-            //
-            //     if(itemSumm >= nextItemStart || itemSumm <= previtemStart ) {
-            //
-            //         renderReadyLeft.push({ width: 50, ...eventLeft[i]});
-            //
-            //     } else {
-            //
-            //         renderReadyLeft.push({ width: 100, ...eventLeft[i]});
-            //     }
-            //
-            // }
-
-        console.log(renderReadyLeft, 'renderReadyLeft');
-
-        //
-        // console.log(renderLeft, 'renderEventLeft');
-
-        // const renderEventLeft = eventLeft.map( (item, index, arr) => {
-        //     let width;
-        //     const nextItem = arr[index+1].start;
-        //     const currentItem = item.start;
-        //     console.log(nextItem, currentItem, 'prev - next');
-        //
-        //
-        //     if(arr[index+1]){
-        //         if(item.start === arr[index+1].start){
-        //             width = 50;
-        //             return <Event key={ 'a' + index } data={ item } width={width} />;
-        //         } else {
-        //
-        //             width = 100;
-        //
-        //         }
-        //     }
-        //
-        //     return <Event key={ 'a' + index } data={ item } width={width} />;
-        //
-        //
-        //
-        //
-        // });
-
-
-        const renderEventLeft = eventLeft.map( (item, index, arr) => {
-            // let nextWidthItem;
-            // let leftVal = 0;
-            //
-            // if(arr[index + 1]){
-            //     nextWidthItem = arr[index + 1].width;
-            // }
-            //
-            // if(item.width === nextWidthItem){
-            //     leftVal = 50;
-            // }
-
-
-            return <Event key={ item._id }
-                   removeEventItem = { this.props.removeEventItem }
-                   data={ item } />;
-
-        });
-
-        // const renderEventLeft = eventLeft.map( (item, index) => <Event key={ item._id }
-        //                                                                removeEventItem = { this.props.removeEventItem }
-        //                                                                data={ item } />);
-
-        const renderEventRight = eventRight.map( (item, index) => <Event key={ item._id  }
-                                                                         removeEventItem = { this.props.removeEventItem }
-                                                                         data={ item } />);
+        const rightEvents = eventRight.map( (item, index) => <Event key={ item._id }
+                                              removeEventItem = { this.props.removeEventItem }
+                                              data={ item } />);
 
 
         return(
@@ -264,7 +145,7 @@ class Table extends Component {
                         </div>
 
                         <div className={Styles.recEventsColumn}>
-                            { renderEventLeft }
+                            { leftEvents }
                         </div>
 
 
@@ -329,7 +210,7 @@ class Table extends Component {
                         </div>
 
                         <div className={Styles.recEventsColumn}>
-                            { renderEventRight }
+                            { rightEvents }
                         </div>
 
                     </div>
